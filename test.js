@@ -32,6 +32,24 @@ describe('@wext/storage', () => {
     assert.deepStrictEqual(result, { key1: 'foo', key2: 'bar' })
   })
 
+  it('removes multiple values', async () => {
+    await storage.local.set({ key1: 'foo' })
+    await storage.local.set({ key2: 'bar' })
+    await storage.local.set({ key3: 'baz' })
+    await storage.local.set({ key4: 'qux' })
+    await storage.local.set({ key5: 'quux' })
+    await storage.local.set({ key6: 'corge' })
+
+    await storage.local.remove(['key1', 'key2', 'key4', 'key6'])
+
+    assert.strictEqual((await storage.local.get('key1')).key1, undefined)
+    assert.strictEqual((await storage.local.get('key2')).key2, undefined)
+    assert.strictEqual((await storage.local.get('key3')).key3, 'baz')
+    assert.strictEqual((await storage.local.get('key4')).key4, undefined)
+    assert.strictEqual((await storage.local.get('key5')).key5, 'quux')
+    assert.strictEqual((await storage.local.get('key6')).key6, undefined)
+  })
+
   it('clears the store', async () => {
     await storage.local.set({ key1: 'foobar' })
     await storage.sync.set({ key2: 'foobar' })
