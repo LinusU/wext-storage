@@ -24,6 +24,14 @@ describe('@wext/storage', () => {
     assert.strictEqual(removeMe, undefined)
   })
 
+  it('gives all values', async () => {
+    await storage.local.set({ key1: 'foo' })
+    await storage.local.set({ key2: 'bar' })
+    const result = await storage.local.get(null)
+
+    assert.deepStrictEqual(result, { key1: 'foo', key2: 'bar' })
+  })
+
   it('clears the store', async () => {
     await storage.local.set({ key1: 'foobar' })
     await storage.sync.set({ key2: 'foobar' })
